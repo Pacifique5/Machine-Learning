@@ -1,0 +1,7 @@
+fig, ax = plt.subplots()
+ax.scatter(df['seating_capacity'], df['price'])
+ax.set_xlabel('Seating Capacity')
+ax.set_ylabel('Price')
+ax.set_title('Price vs Seating Capacity')
+plt.tight_layout()
+plt.show()
