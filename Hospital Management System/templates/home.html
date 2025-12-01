@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="mb-0">Dashboard</h1>
+  <div class="text-muted">Overview</div>
+  
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card kpi-card p-3">
+      <div class="d-flex align-items-center">
+        <div class="me-3 text-primary"><i class="bi bi-people" style="font-size: 1.75rem;"></i></div>
+        <div>
+          <div class="text-muted small">Patients</div>
+          <div class="h3 mb-0">{{ kpis.patients_total }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card kpi-card p-3">
+      <div class="d-flex align-items-center">
+        <div class="me-3 text-success"><i class="bi bi-person-badge" style="font-size: 1.75rem;"></i></div>
+        <div>
+          <div class="text-muted small">Staff</div>
+          <div class="h3 mb-0">{{ kpis.staff_total }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card kpi-card p-3">
+      <div class="d-flex align-items-center">
+        <div class="me-3 text-warning"><i class="bi bi-calendar-event" style="font-size: 1.75rem;"></i></div>
+        <div>
+          <div class="text-muted small">Appointments Today</div>
+          <div class="h3 mb-0">{{ kpis.appointments_today }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card kpi-card p-3">
+      <div class="d-flex align-items-center">
+        <div class="me-3 text-info"><i class="bi bi-clock-history" style="font-size: 1.75rem;"></i></div>
+        <div>
+          <div class="text-muted small">Upcoming Appointments</div>
+          <div class="h3 mb-0">{{ kpis.appointments_upcoming }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-12 col-lg-6">
+    <div class="card p-3 h-100">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="mb-0">Upcoming appointments</h5>
+        <a class="btn btn-sm btn-outline-secondary" href="/appointments/">View all</a>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Patient</th>
+              <th>Staff</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for appt in upcoming_appointments %}
+              <tr>
+                <td>{{ appt.scheduled_at|date:"M d, Y H:i" }}</td>
+                <td>{{ appt.patient }}</td>
+                <td>{{ appt.staff|default:'—' }}</td>
+                <td><span class="badge text-bg-light">{{ appt.get_status_display }}</span></td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="4" class="text-muted text-center p-4">No upcoming appointments.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-lg-6">
+    <div class="card p-3 h-100">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="mb-0">Recent patients</h5>
+        <a class="btn btn-sm btn-outline-secondary" href="/patients/">View all</a>
+      </div>
+      <ul class="list-group list-group-flush">
+        {% for p in recent_patients %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <div class="fw-semibold">{{ p.first_name }} {{ p.last_name }}</div>
+              <div class="small text-muted">Created {{ p.created_at|date:"M d, Y" }}</div>
+            </div>
+            <a class="btn btn-sm btn-outline-primary" href="/patients/"><i class="bi bi-eye me-1"></i>Open</a>
+          </li>
+        {% empty %}
+          <li class="list-group-item text-muted text-center">No patients yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
